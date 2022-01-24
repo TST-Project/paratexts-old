@@ -6,7 +6,7 @@ const xlsx = require('xlsx');
 
 const xsltSheet = fs.readFileSync('./xslt/tei-to-html-reduced.json',{encoding:'utf-8'});
 
-const dir = './mss/';
+const dir = '../mss/';
 
 fs.readdir(dir,function(err,files) {
     if(err)
@@ -270,7 +270,7 @@ const output = {
         const thead = make.header(['Blessing','Shelfmark','Repository','Title','Unit','Page/folio','Placement']);
         table.innerHTML = thead + tstr;
         table.querySelectorAll('th')[1].classList.add('sorttable_alphanum');
-        fs.writeFile('blessings.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+        fs.writeFile('../blessings.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
    
     xslxblessings: (data) => {
@@ -329,7 +329,7 @@ const output = {
         const wb = xlsx.utils.book_new();
         const ws = xlsx.utils.table_to_sheet(htmltab);
         xlsx.utils.book_append_sheet(wb,ws,'blessings');
-        xlsx.writeFile(wb,'blessings.xlsx');
+        xlsx.writeFile(wb,'../blessings.xlsx');
     },
 
     colophons: (data,templatestr) => {
@@ -378,7 +378,7 @@ const output = {
         table.innerHTML = thead + tstr;
         table.querySelectorAll('th')[1].classList.add('sorttable_alphanum');
 
-        fs.writeFile('colophons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+        fs.writeFile('../colophons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
     tbcs: (data,templatestr) => {
 
@@ -439,7 +439,7 @@ const output = {
         const thead = make.header(['Paratext','Shelfmark','Repository','Title','Unit','Page/folio','Placement']);
         table.innerHTML = thead + tstr;
         table.querySelectorAll('th')[1].classList.add('sorttable_alphanum');
-        fs.writeFile('tbcs.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+        fs.writeFile('../tbcs.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
     persons: (data, templatestr) => {
 
@@ -480,6 +480,6 @@ const output = {
         const thead = make.header(['Person','Role','Shelfmark','Repository','Title']);
         table.innerHTML = thead + tstr;
         table.querySelectorAll('th')[2].classList.add('sorttable_alphanum');
-        fs.writeFile('persons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+        fs.writeFile('../persons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
 };
