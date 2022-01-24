@@ -628,4 +628,4 @@ const Sanscript = {};
         }
     };
 
-module.exports = Sanscript;
+export {Sanscript};
