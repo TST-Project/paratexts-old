@@ -23,5 +23,5 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with: 
           commit_message: automatic paratexts update
-          file_pattern: *.html *.fods *.xlsx
+          file_pattern: ./*.html ./*.xlsx
           commit_user_name: TST Bot
