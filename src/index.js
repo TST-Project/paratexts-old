@@ -101,7 +101,12 @@ const find = {
     persnames: (xmlDoc) => {
         return [...xmlDoc.querySelectorAll('persName')]
             .filter(el => !el.closest('editionStmt') && !el.closest('editor') && !el.closest('bibl') && !el.closest('change'))
-            .map(el => {return {name: el.innerHTML, role: el.getAttribute('role') || ''};});
+            .map(el => {
+                return {
+                    name: el.hasAttribute('key') ? el.getAttribute('key') : el.innerHTML, 
+                    role: el.getAttribute('role') || ''
+                };
+            });
     },
 
     authors: (xmlDoc) => {
