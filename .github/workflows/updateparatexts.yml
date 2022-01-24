@@ -18,6 +18,7 @@ jobs:
 
       - run: |
           git clone https://github.com/TST-Project/mss.git
+          yarn install
           yarn build
 
       - uses: stefanzweifel/git-auto-commit-action@v4
