@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "jsdom": "^19.0.0",
+    "saxon-js": "^2.3.0",
+    "xlsx": "^0.17.5"
+  },
+  "scripts": {
+    "build": "node index.js"
+  },
+  "name": "tst-paratexts",
+  "version": "1.0.0",
+  "description": "TST Paratexts",
+  "main": "index.js",
+  "repository": "https://github.com/TST-Project/lib",
+  "author": "Charles Li",
+  "license": "MIT"
+}

@@ -1,0 +1,27 @@
+name: update paratexts
+on:
+  repository_dispatch:
+    types: [trigger-update]
+  workflow_dispatch:
+jobs:
+  update-paratexts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - run: |
+          git clone https://github.com/TST-Project/mss.git
+          yarn build
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: automatic paratexts update
+          file_pattern: *.html *.fods *.xlsx
+          commit_user_name: TST Bot
