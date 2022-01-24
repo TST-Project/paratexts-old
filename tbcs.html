@@ -1,0 +1,1414 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      
+      <title>Texts Surrounding Texts: TBC</title>
+      
+      <link rel="icon" type="image/png" href="../mss/favicon-32.png">
+      <link rel="stylesheet" href="../lib/css/tufte.css">
+      <link rel="stylesheet" href="../lib/css/fonts.css">
+      <link rel="stylesheet" href="../lib/css/header.css">
+      <link rel="stylesheet" href="../lib/css/transcription.css">
+      <style type="text/css">
+        table, #index {
+            font-size: 1.4rem;
+            width: 85%;
+        }
+        #head {
+            background-color: #eee;
+            color: #666666;
+            cursor: default;
+            top: 0;
+            position: sticky;
+        }
+        tbody th {
+            text-align: left;
+        }
+        th.subpart {
+            padding-left: 1rem;
+        }
+        th.subsubpart {
+            padding-left: 1.5rem;
+        }
+        th, td {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .smallcaps {
+            font-variant: small-caps; 
+            font-size: 0.8em;
+        }
+        
+        #menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            min-width: 1000px;
+            background-color: #eee;
+            color: #666666;
+            flex-direction: row;
+            font-size: 1.5rem;
+        }
+
+        #menu a[href] {
+            color: #666666;
+        }
+        #menu > div {
+            margin-right: 5rem;
+            padding: 0 1.5rem 0 1.5rem;
+        }
+        
+        #menu .main a[href] {
+            color: black;
+        }
+        
+        #menu .selected {
+            background-color: rgb(255,255,248);
+        }
+        
+        #menu a {
+            background-image: none;
+            text-shadow: none;
+        }
+        
+        #menu > div:hover {
+            background-color: rgb(255,255,248);
+        }
+        a[href] {
+            color: rgb(17,17,17);
+        }
+        a[href]::after {
+            background: none;
+            padding-right: 0;
+        }
+        a[href]:hover::after {
+            background: none;
+            padding-right: 0;
+        }
+
+        #tooltip {
+            display: block;
+            position: fixed;
+            background: rgba(17,17,17,0.8);
+            border-radius: 4px;
+            color: #fff;
+            font-style: normal;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: normal;
+            line-height: normal;
+            vertical-align: middle;
+            padding: 0.5em 1em;
+            margin-bottom: 11px;
+            max-width: 200px;
+            z-index: 3;
+        }
+
+        #tooltip hr {
+            border: 0;
+            margin-bottom: 3px;
+            margin-top: 3px;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0),rgba(255,255,255,0.75),rgba(255,255,255,0));
+        }
+        .dropper {
+            position: relative;
+            display: inline-block;
+        }
+        .dropped {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            background-color: #eee;
+            margin-left: 0;
+            padding-left: 0;
+            left: 0;
+            width: max-content;
+        }
+        .dropped a {
+            width: 100%;
+            display: block;
+            padding-top: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .dropped a:hover {
+            background-color: rgb(255,255,248);
+        }
+
+        .dropper:hover .dropped {
+            display: block;
+        }
+      </style>
+      
+      <script type="text/javascript" src="../lib/js/sorttable.js"></script>
+      <script type="text/javascript">
+        // from https://stackoverflow.com/questions/28711653/sorting-string-function-by-custom-alphabet-javascript
+        function makeComparer(order) {
+          var ap = Array.prototype;
+
+          // mapping from character -> precedence
+          var orderMap = {},
+              max = order.length + 2;
+          ap.forEach.call(order, function(char, idx) {
+            orderMap[char] = idx + 1;
+          });
+
+          function compareChars(l, r) {
+            var lOrder = orderMap[l] || max,
+                rOrder = orderMap[r] || max;
+
+            return lOrder - rOrder;
+          }
+
+          function compareStrings(l, r) {
+            var minLength = Math.min(l.length, r.length);
+            var result = ap.reduce.call(l.substring(0, minLength), function (prev, _, i) {
+                return prev || compareChars(l[i], r[i]);
+            }, 0);
+
+            return result || (l.length - r.length);
+          }
+
+          return compareStrings;
+        }
+        sorttable.sort_alpha = function(a,b) {
+            const comparer = makeComparer('aāiīuūeēoōkgṅcñṭṇtnpbfmyrlvḻḷṟṉjṣśh');
+            return comparer(a[0].toLowerCase(),b[0].toLowerCase());
+        }
+        const docMouseover = function(e) {
+            var targ = e.target.closest('[data-anno]');
+            while(targ && targ.hasAttribute('data-anno')) {
+                toolTip.make(e,targ);
+                targ = targ.parentNode;
+            }
+        };
+        const toolTip = {
+            make: function(e,targ) {
+                console.log('yes');
+                const toolText = targ.dataset.anno;
+                if(!toolText) return;
+
+                var tBox = document.getElementById('tooltip');
+                const tBoxDiv = document.createElement('div');
+
+                if(tBox) {
+                    for(const kid of tBox.childNodes) {
+                        if(kid.myTarget === targ)
+                            return;
+                    }
+                    tBoxDiv.appendChild(document.createElement('hr'));
+                }
+                else {
+                    tBox = document.createElement('div');
+                    tBox.id = 'tooltip';
+                    tBox.style.top = (e.clientY + 10) + 'px';
+                    tBox.style.left = e.clientX + 'px';
+                    tBox.style.opacity = 0;
+                    tBox.style.transition = 'opacity 0.2s ease-in';
+                    document.body.appendChild(tBox);
+                    tBoxDiv.myTarget = targ;
+                }
+
+                tBoxDiv.appendChild(document.createTextNode(toolText));
+                tBoxDiv.myTarget = targ;
+                tBox.appendChild(tBoxDiv);
+                targ.addEventListener('mouseleave',toolTip.remove,{once: true});
+                window.getComputedStyle(tBox).opacity;
+                tBox.style.opacity = 1;
+            },
+            remove: function(e) {
+                const tBox = document.getElementById('tooltip');
+                if(tBox.children.length === 1) {
+                    tBox.remove();
+                    return;
+                }
+
+                const targ = e.target;
+                for(const kid of tBox.childNodes) {
+                    if(kid.myTarget === targ) {
+                        kid.remove();
+                        break;
+                    }
+                }
+                if(tBox.children.length === 1) {
+                    const kid = tBox.firstChild.firstChild;
+                    if(kid.tagName === 'HR')
+                        kid.remove();
+                }
+            },
+        };
+      </script>
+   </head>
+   <body lang="en">
+    <div id="menu">
+        <div class="main"><a href="https://tst.hypotheses.org">Texts Surrounding Texts</a></div>
+        <div><a href="../mss">Manuscripts</a></div>
+        <div class="dropper">
+            <span>Tools</span>
+            <div class="dropped">
+                <a href="../editor">TST editor</a>
+                <a href="https://github.com/chchch/quick-palaeographer">Quick palaeographer</a>
+            </div>
+        </div>
+        <div><a href="../editor/entities.html">Tamil transcription</a></div>
+        <div class="dropper">
+            <span>Paratexts</span>
+            <div class="dropped">
+                <a href="blessings.html">Blessings</a>
+                <a href="colophons.html">Colophons</a>
+            </div>
+        </div>
+        <div><a href="../xylotheque">Xylothèque</a></div>
+    </div>
+    <article>
+        <section>
+            <table id="index" class="sortable">
+                <tbody><tr id="head"><th>Paratext</th><th class="sorttable_alphanum">Shelfmark</th><th>Repository</th><th>Title</th><th>Unit</th><th>Page/folio</th><th>Placement</th></tr><tr>
+                <td>
+                malar <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>tāl
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0022.xml">Indien 22</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Collection: 2 Śaiva works
+                </td>
+                <td>
+                U5
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                left margin 2
+                </td>
+                </tr>
+<tr>
+                <td>
+                māmāmāmāmāmāmā
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0033.xml">Indien 33</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Composite: 3 Vedānta works
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                
+                </td>
+                </tr>
+<tr>
+                <td>
+                kavikarṉaṉ
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0033.xml">Indien 33</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Composite: 3 Vedānta works
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio [1]v
+                </td>
+                <td>
+                
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="unclear" data-anno="unclear">kaḷittamaṉattuṭaiyāciṉ moḻitta tēcīkāciṉiyī</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0033c.xml">Indien 33c</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Patipacupācaviḷakkam
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 29v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                Ātiraiyāṉai yaṭi paṉintēttamūturai yāṉatu muppatum varumē
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0070.xml">Indien 70</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Mūturai
+                </td>
+                <td>
+                U2a
+                </td>
+                <td>
+                folio 1r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                Iv-vāciṭṭam y<span class="invisible">-</span>eḻutiyavaṟk=kuluḷḷa kuṟṟam ellām <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>periyōrkaḷ Aṅkikarikka vēṇṭiyatu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0083.xml">Indien 83</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Collection (2 items): Kolai Maṟuttal &amp; Ñāṉavāciṭṭam
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 247r
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                y<span class="invisible">-</span>oruntīya caṟanūl y-eṉṟ<span class="invisible">’</span> aṟi- <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>yalu<span class="bold" lang="sa">=m</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0095.xml">Indien 95</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Caranūl
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 11r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="lb" lang="en" data-anno="line 1" data-n="1">␤</span>Dictionnaire des drogues d’usage dans cette pharmacie les Ta= <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>moulaires, les maures, les Indiens de ce pays ont coutume d’ajouter <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>au nom de la plante, la partie qui est en usage, comme <span class="unclear" data-anno="unclear">syvadévér</span> <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>Racine de <span class="unclear" data-anno="unclear">turbit</span> <span class="unclear" data-anno="unclear">{symbol}</span>. Je vais commencer par donner le nom des dif= <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>ferentes partie des plantes dans le même ordre que cy dessus comme <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>les noms serait trop long en y joignant la partie d’usage je remar= <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>querai le nom de la plante et on pourra venir chercher la partie d’usage <span class="lb" lang="en" data-anno="line 8" data-n="8">␤</span>au commencement de cette table où je vais les inscrire
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0138.xml">Indien 138</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Dictionary, Pharmaceutical, by Ariel
+                </td>
+                <td>
+                U1a
+                </td>
+                <td>
+                folio 1r
+                </td>
+                <td>
+                
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="milestone" lang="en">column 1</span> <span class="lb" lang="en" data-anno="line 28" data-n="28">␤</span>Aṭaikkala nāyaki yampuyac cē <span class="lb" lang="en" data-nobreak="" data-anno="line 29" data-n="29">␤</span>vaṭi ‡ <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 30-33" data-n="30-33">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> kuḷippa ‡ <span class="milestone" lang="en">column 2</span> <span class="lb" lang="en" data-anno="line 34-39" data-n="34-39">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="milestone" lang="en">main text area </span> <span class="lb" lang="en" data-anno="line 40" data-n="40">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 41" data-n="41">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 42" data-n="42">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 43" data-n="43">␤</span>vīṟariyaṉ eṉum vētiyāṉ ṟārāy ‡ muṭitta <span class="lb" lang="en" data-anno="line 44" data-n="44">␤</span>caturakarātiyē ‡•
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0227.xml">Indien 227</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Caturakarāti, by Beschi
+                </td>
+                <td>
+                U1c
+                </td>
+                <td>
+                page 347
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                murukaiyaṉ <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>paṭikkiṉṟatu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0230.xml">Indien 230</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Malaiyakarāti
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 1r
+                </td>
+                <td>
+                left margin 2
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="lb" lang="en" data-anno="line 1-3" data-n="1-3">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0265.xml">Indien 265</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Pāratam (partim)
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 433v
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                y<span class="invisible">-</span>ippāl patiṉeṭṭāṉāḷ uyittiyam
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0265.xml">Indien 265</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Pāratam (partim)
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 501v
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                vēṟu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0293.xml">Indien 293</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Periya Purāṇam
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 4v
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                vēṟu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0293.xml">Indien 293</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Periya Purāṇam
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 8r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                karuṇi <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> purāṇam
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0319.xml">Indien 319</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Kūrmapurāṇam
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 296r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                Appaṭikk<span class="invisible">’</span> otta taṟmattaik kēṭṭa <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>vaṟkum paṭittavaṟkum Eḻuti vaittavaṟkum yippaṭikk<span class="invisible">’</span> otta pōkaṅkaḷai y<span class="invisible">-</span>ellām Aṟivu niṉavu putti yōca <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span><span data-anno="explicit">ṉai y<span class="invisible">-</span>uṇṭāki civapatattai y<span class="invisible">-</span>aṭaivārkaḷ eṉṟa v<span class="invisible">-</span>āṟu</span> = {kōmūttiram}
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0412.xml">Indien 412</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                2 narratives: Pañcatantirak Katai &amp; Nālu Mantirik Katai         
+                </td>
+                <td>
+                U3b
+                </td>
+                <td>
+                folio 100v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                ṉālumulaip <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span data-anno="explicit">karumpu</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0414.xml">Indien 414</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Pañcatantirakkatai
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 19r
+                </td>
+                <td>
+                
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="unclear" data-anno="unclear">pa</span>cu-vācaka<span class="bold" lang="sa">=m</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0420.xml">Indien 420</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Nālu Mantiri Katai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                nālu mantirikkataiyai yātām oruvar paṭittōrum paṭikkac collik kēṭ=ṭa pērum marupiṟiti y<span class="invisible">-</span>e<span class="choice" data-anno="choice"><span class="orig" data-anno="original (regular: ḻ)">ḷ</span></span>uti <span class="pb" lang="en" data-loc="00" data-n="p. 54r" data-anno="page 54r image 00">␤</span> <span class="lb" lang="en" data-anno="line 1" data-n="1">␤</span>p paṭitta pērum maki<span class="choice" data-anno="choice"><span class="orig" data-anno="original (regular: ḻ)">ḷ</span></span>cci kūrntu paripūṟṇamākak kēḷkkiṟa pērum Inta nālu mantirimārkaḷukk<span class="invisible">’</span> uṇṭāṉa Aṟivum <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>vipēkamum kalviyum meññāṉamum vittaiyum muttiyum puttiyum vīra-tattuva-pi<span class="unclear" data-anno="unclear">ḷu</span>kkiṟamum poṟumaiyu viṭaṭcaṉi <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>kamum kaivi<span class="unclear" data-anno="unclear">ṣaṟtār</span> vacaṉamum Intirapōkamum Aṣa<del data-anno="deleted"><span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span></del>laṭcimiyum porunti Aṭṭaṅka yōka-pōka-pākkiyattai <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>yum Aṇupivittuk koṇṭu yetirāḻiya<span class="unclear" data-anno="unclear">ḷu</span>kku Oru ciṅ<span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> pōlavum iruntu cuppiṟamaṇiya-tiru-kiṭāṣca <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span><span lang="en" class="gap ellipsis" data-anno="gap of 1 character (ellipsis)"><span>…</span></span>ṭcaṇam uṇṭāki carikai kiṟukai yōkamu ṉāṉamum peṟṟu cāyuṭciyapataviyai Aṭaittu kayilāca-paṟuva <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>tam vaykunta-paṟuvatattil <span lang="en" class="gap ellipsis" data-anno="gap of 1 character (ellipsis)"><span>…</span></span>ttiruk kaṭavār ākavu<span class="bold" lang="sa">=m</span> <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0420.xml">Indien 420</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Nālu Mantiri Katai
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 53v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span>vār ākilum paṭiccup poṭṭu Ēṭṭai <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>kuṭut=tu viṭavu<span class="bold" lang="sa">=m</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0420.xml">Indien 420</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Nālu Mantiri Katai
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 53v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                kuṭukātap poṉāl pāvattilē pōvaṉ Itu Aṟiyavu<span class="bold" lang="sa">=m</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0420.xml">Indien 420</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Nālu Mantiri Katai
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 53v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                pacu-vā <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span><span class="supplied omitted" data-anno="supplied (omitted)">ca</span>kam
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0420.xml">Indien 420</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Nālu Mantiri Katai
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                vikkiṟamāṟkaṉ takappa cantira kuyittu Avaṉukkut tevimār nālu per pirāmaṇatti <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>piḷḷai vāruci kṣattiriyap peṇṇiṉ piḷḷai vikkiṟamāṟkaṉ vaciyap peṇ – ṇiṉ piḷḷai paṭṭi cūttira <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>p peṇṇiṉ piḷḷai pattirakiri piḷḷaikaḷukk’ ellām mūttavaṉ pattirakiri
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0422.xml">Indien 422</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Vikkiramātittaṉ Patumaikkatai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                page 94v
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0424.xml">Indien 424</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Vikkiramārkaṉ Katai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio 40v
+                </td>
+                <td>
+                column 1
+                </td>
+                </tr>
+<tr>
+                <td>
+                
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0424.xml">Indien 424</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Vikkiramārkaṉ Katai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio 40v
+                </td>
+                <td>
+                column 2
+                </td>
+                </tr>
+<tr>
+                <td>
+                
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0424.xml">Indien 424</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Vikkiramārkaṉ Katai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio 40v
+                </td>
+                <td>
+                column 3
+                </td>
+                </tr>
+<tr>
+                <td>
+                viyākulammaḷ <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>paṭikkiṟatu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0484.xml">Indien 484</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Alacu Ammāṉai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                column 2
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="persname" data-anno="person name">tayiriyaṉāta-rācariṣiyār cuvāmi</span> <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>vayavarkaḷ piṟitta ~ lut <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>tēriṉatt<span class="invisible">'</span> iyalpu ~ tīcukkuk <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>kaṭaimāṉak kuṟippu <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>y<span class="invisible">-</span>eṉṟ<span class="invisible">'</span> aṟiyavum
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0489.xml">Indien 489</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Luttēriṉattiyalpu
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                kalviyoḻukkam <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>kurukuṭaṉ paṭikka <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>celvamikuntu <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>ciṟupp<span class="invisible">’</span> uṇṭāmē
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0530f.xml">Indien 530f</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Kalviyoḻukkam
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                left margin 3
+                </td>
+                </tr>
+<tr>
+                <td>
+                paṇ <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>naṭṭapāṭai
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0950.xml">Indien 950</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Tēvāram    
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                paṇ <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>naṭṭapā <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>ṭai
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0950.xml">Indien 950</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Tēvāram    
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 2r
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>cēruvai-cōlakkaṟaṉ <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>paṭikkiṇṭa naḷacakaṟa <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>vaṟttikkatai
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0953.xml">Indien 953</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Naḷacakkarvarttik Katai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="lb" lang="en" data-anno="line 1" data-n="1">␤</span>cēruvai <span class="unclear" data-anno="unclear">Ai</span> kōlakkaṟaṉ <span lang="en" class="term ">{symbol}</span> <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>cerntom y<span class="invisible">-</span>itu vilaiyāvākiṉatu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0953.xml">Indien 953</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Naḷacakkarvarttik Katai
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                ṉaḷaccakkiṟavaṟtti-katai y-itai Aṟiyalu<span class="bold" lang="sa">=m</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0953.xml">Indien 953</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Naḷacakkarvarttik Katai
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 117r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                Innūl tiruttakkatēvarāl paṇṇappaṭṭa cintāmaṇiyai nacciṉārkkiṉiyarāl urai paṇṇappaṭṭaṉa v<span class="invisible">-</span>eṉka
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0957.xml">Indien 957</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Cīvakacintāmaṇi, part 2 of 2
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 332r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="lb" lang="en" data-anno="line 9-12" data-n="9-12">␤</span><span lang="en" class="note
+ inline" data-anno="note
+ ">right-oriented, unblackened</span> <span class="lb" lang="en" data-anno="line 9" data-n="9">␤</span>Aṭiyēṉuk=ku nalla put=tirar vēṇu<span class="bold" lang="sa">m</span> <span class="lb" lang="en" data-anno="line 10" data-n="10">␤</span>Aṭiyēṉuk=ku Aṉṉava kṣat=tirat=tuk=ku kīlēcam i <span class="lb" lang="en" data-nobreak="" data-anno="line 11" data-n="11">␤</span>llāmal kuṭuk=kavu<span class="bold" lang="sa">=m</span> Aṭiyēṉuk=ku nalla <span class="lb" lang="en" data-nobreak="" data-anno="line 12" data-n="12">␤</span>pu<span class="unclear" data-anno="unclear">t=ti</span>var vēṇum
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_0963.xml">Indien 963</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Viruttācalappuṟāṇam + Tiruttoṇṭattokai
+                </td>
+                <td>
+                U2a
+                </td>
+                <td>
+                folio 24v
+                </td>
+                <td>
+                left margin 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span class="lb" lang="en" data-anno="line 1" data-n="1">␤</span>kāraik=kālil | śrī | śrī | ceṭṭiy <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>ṟavarkaḷ | śrī | <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> ṅka ceṭṭiyār <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>varkaḷ=<span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> śrī koṭuppatu
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Indien_1037.xml">Indien 1037</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Talisman or Private Letter
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio [1]r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                karakṛtam aparādhaṃ kṣantum arhanti santaḥ
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio [1]v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                gurur brahmā gurur viṣṇur gurur eva maheśvaraḥ
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio [1]v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                gurur eva paraṃ brahma tasmai śrīgurave <span class="choice" data-anno="choice"><span class="sic" data-anno="sic (corrected: namaḥ)">nmaḥ</span></span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio [1]v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                yādṛśaṃ pustakaṃ dṛṣṭvā tādṛśaṃ likhitaṃ mayā
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U4
+                </td>
+                <td>
+                folio 342r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                Abaddhaṃ vā subaddhaṃ vā mama doṣo na vidyate
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U4
+                </td>
+                <td>
+                folio 342r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                karakṛtam aparādhaṃ kṣantum arhanti santaḥ
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U4
+                </td>
+                <td>
+                folio 342v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                visargabindumatrāṇi padapādākṣarāṇi ca | nyūnāni cātiriktāni kṣamasva parameśvara
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0291.xml">Sanscrit 291</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                Yajurveda Taittirīyasaṃhitā
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 240v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                yadṛ<del data-anno="deleted"><span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span></del>ṣam pustaka<span class="unclear" data-anno="unclear">n</span> dṛṣtvā tādṛśaṃ likhitan mayā | Abaddham subaddhaṃ vā mama doṣo na vidyate | <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0815.xml">Sanscrit 815</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Dharmaśāstra Works (Ducler Dharmaśāstra, volume 1)     
+                </td>
+                <td>
+                U1
+                </td>
+                <td>
+                folio 148v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                Aṃgirāḥ | <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> śaunakaḥ | <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0815.xml">Sanscrit 815</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Dharmaśāstra Works (Ducler Dharmaśāstra, volume 1)     
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 286v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0815.xml">Sanscrit 815</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Dharmaśāstra Works (Ducler Dharmaśāstra, volume 1)     
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 286v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                yādṛṣaṃ pustakan dṛṣṭvā tādṛṣaṃ likhitan mayā | Abaddhaṃ vā subaddhaṃ vā mama doṣo <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>na vidyate | <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0815.xml">Sanscrit 815</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Dharmaśāstra Works (Ducler Dharmaśāstra, volume 1)     
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 287r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                visargabindumatrāṇi padapādākṣarāṇi ca | nyūnāni cātiriktāni kṣamasva parameśvara | <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0815.xml">Sanscrit 815</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Dharmaśāstra Works (Ducler Dharmaśāstra, volume 1)     
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 287r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                bindu-durllipi-visarga-vīthikā-sṛṃgapa<span class="unclear" data-anno="unclear">ṅ</span>kti-bheda-pada-bheda-dūṣaṇaṃ | hastavegaja <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>m abuddhipūrvakaṃ kṣantum arhatha samīkṣya sajjatāḥ <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0815.xml">Sanscrit 815</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Dharmaśāstra Works (Ducler Dharmaśāstra, volume 1)     
+                </td>
+                <td>
+                U3
+                </td>
+                <td>
+                folio 287r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                visarga-bindu-matrāṇi padapādākṣarāṇi ca | nyūnāni cātiriktāni kṣamasva parameśva<span class="unclear" data-anno="unclear">ra</span> |
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0816.xml">Sanscrit 816</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Mitākṣarā
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 200v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                yādṛṣaṃ pustakaṃ dṛṣṭvā tādṛśaṃ likhitan mayā | Abaddhaṃ vā subaddhaṃ vā mama doṣo na vi <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>dyate | <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0816.xml">Sanscrit 816</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                 Mitākṣarā
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 201r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                yādṛṣaṃ pustakan dṛṣṭvā tādṛśaṃ likhitan mayā | A <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>baddhaṃ vā subaddhaṃ vā mama doṣo na vidyate | <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0818.xml">Sanscrit 818</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                  Smṛtimuktaphala (Ducler Dharmaśāstra, volume 2)     
+                </td>
+                <td>
+                U2
+                </td>
+                <td>
+                folio 87v
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+<tr>
+                <td>
+                karakṛtam aparādhaṃ kṣantum arhanti santaḥ <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> hariḥ Om <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+                </td>
+                <td><a href="https://tst-project.github.io/./mss/Sanscrit_0818.xml">Sanscrit 818</a></td>
+                <td>
+                BnF
+                </td>
+                <td>
+                  Smṛtimuktaphala (Ducler Dharmaśāstra, volume 2)     
+                </td>
+                <td>
+                U4
+                </td>
+                <td>
+                folio 317r
+                </td>
+                <td>
+                main text area 
+                </td>
+                </tr>
+</tbody>
+            </table>
+        </section>
+    </article>
+   
+   <script type="text/javascript">
+      document.querySelector('table').addEventListener('mouseover',docMouseover);
+   </script>
+
+</body></html>
