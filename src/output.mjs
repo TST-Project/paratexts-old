@@ -292,12 +292,10 @@ const output = {
             
             if(!cur.role) return acc;
 
-            const cleanname = cur.name;
-
-            if(!acc.has(cleanname))
-                acc.set(cleanname, {roles: new Set([cur.role]), texts: new Set([cur.cote])});
+            if(!acc.has(cur.name))
+                acc.set(cur.name, {roles: new Set([cur.role]), texts: new Set([cur.cote])});
             else {
-                const oldrec = acc.get(cleanname);
+                const oldrec = acc.get(cur.name);
                 oldrec.texts.add(cur.cote);
                 oldrec.roles.add(cur.role);
             }
