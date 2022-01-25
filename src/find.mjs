@@ -1,3 +1,5 @@
+import { util } from './utils.mjs';
+
 const find = {
     blessings: (xmlDoc) => xmlDoc.querySelectorAll('seg[function="blessing"], desc[type~="blessing"]'),
     benedictions: (xmlDoc) => xmlDoc.querySelectorAll('seg[function="benediction"], desc[type~="benediction"]'),
@@ -52,7 +54,7 @@ const find = {
         const els = [...xmlDoc.querySelectorAll('handNote[scribeRef]')];
         const scribes = new Map([
             ['#ArielTitleScribe','Ariel\'s title scribe'],
-            ['#EdouardAriel','Edouard Ariel'],
+            ['#EdouardAriel','Édouard Ariel'],
             ['#PhEDucler','Philippe Étienne Ducler'],
             ['#DuclerScribe','Ducler\'s scribe'],
             ['#UmraosinghSherGil','Umraosingh Sher-Gil']
@@ -61,11 +63,20 @@ const find = {
             .filter(el => el !== undefined)
             .map(el => {return {name: el, role: 'scribe'}});
     },
-    allpersons: (xmlDoc) => {
+    allpersons: (xmlDoc,cache) => {
         //const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc),...find.authors(xmlDoc)];
         const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc)];
 
         const peepReducer = function(prevs, cur) {
+            if(cache.has(cur.name))
+                cur.name = cache.get(cur.name);
+            else {
+                const canonicalname = util.personlookup(cur.name);
+                if(canonicalname) {
+                    cache.set(cur.name,canonicalname);
+                    cur.name = canonicalname;
+                }
+            }
             for(const prev of prevs) {
                 if(cur.name === prev.name && cur.role === prev.role)
                     return prevs;
@@ -73,7 +84,7 @@ const find = {
             return [...prevs,cur];
         };
 
-        return peeps.reduce(peepReducer,[]);
+        return {peeps: peeps.reduce(peepReducer,[]), cache: cache};
     },
 };
 

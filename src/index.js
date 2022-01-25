@@ -1,8 +1,3 @@
-//const fs = require('fs');
-//const jsdom = require('jsdom');
-//const SaxonJS = require('saxon-js');
-//const Sanscript = require('./sanscript');
-//const xlsx = require('xlsx');
 import fs from 'fs';
 import { find } from './find.mjs';
 import { make } from './utils.mjs';
@@ -21,10 +16,15 @@ fs.readdir(dir,function(err,files) {
     readfiles(flist);
 });
 
+
 const readfiles = function(arr) {
+    var perscache = new Map();
     const data = arr.map((f) => 
     {
         const xmlDoc = make.xml( fs.readFileSync(f,{encoding:'utf-8'}) );
+        const allpersons = find.allpersons(xmlDoc,perscache);
+        const persons = allpersons.peeps;
+        perscache = allpersons.cache;
         const fname = `https://tst-project.github.io/${f}`;
         return {
             blessings: find.blessings(xmlDoc),
@@ -34,7 +34,7 @@ const readfiles = function(arr) {
             colophons: find.colophons(xmlDoc),
             cote: find.cote(xmlDoc),
             fname: `https://tst-project.github.io/${f}`,
-            persons: find.allpersons(xmlDoc),
+            persons: persons,
             repo: find.repo(xmlDoc),
             tbcs: find.tbcs(xmlDoc),
             title: find.title(xmlDoc)

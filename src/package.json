@@ -3,7 +3,8 @@
     "fs": "^0.0.1-security",
     "jsdom": "^19.0.0",
     "saxon-js": "^2.3.0",
-    "xlsx": "^0.17.5"
+    "xlsx": "^0.17.5",
+    "xpath": "^0.0.32"
   },
   "scripts": {
     "build": "node index.js"

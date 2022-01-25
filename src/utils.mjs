@@ -1,3 +1,5 @@
+import fs from 'fs';
+import xpath from 'xpath';
 import jsdom from 'jsdom';
 
 const make = {
@@ -14,6 +16,9 @@ const make = {
         return `<tr id="head">${cells}</tr>`;
     },
 };
+
+//const persDoc = new DOMParser().parseFromString( fs.readFileSync('../authority-files/authority/authority/persons_base.xml',{encoding:'utf-8'}) ).documentElement;
+const persDoc = make.xml( fs.readFileSync('../authority-files/authority/authority/persons_base.xml',{encoding:'utf-8'}) );
 
 const util = {
     innertext: el => {
@@ -77,6 +82,12 @@ const util = {
             else return e.parentNode.previousElementSibling;
         }
         return false;
+    },
+
+    personlookup: (str) => {
+        const result = xpath.select(`//*[local-name(.)="persName" and text()="${str}"]`,persDoc,true);
+        if(result) return result.closest('person').querySelector('persName[type="standard"]').textContent;
+        else return false;
     },
 };
 
