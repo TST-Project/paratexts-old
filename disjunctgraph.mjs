@@ -141,7 +141,7 @@ const ForceGraph = function({
   }
     console.log(color);
   const legend = d3SvgLegend.legendColor().scale(color).orient('horizontal').shape('circle').shapePadding(100);
-  svg.append('g').attr('class','legendOrdinal').attr('transform','translate(100,470)');
+  svg.append('g').attr('class','legendOrdinal').attr('transform','translate(-750,470)');
   svg.select('.legendOrdinal').call(legend);
   console.log(legend);
   return Object.assign(svg.node(), {scales: {color}});
