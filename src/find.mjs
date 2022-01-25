@@ -34,7 +34,7 @@ const find = {
             .filter(el => !el.closest('editionStmt') && !el.closest('editor') && !el.closest('bibl') && !el.closest('change'))
             .map(el => {
                 return {
-                    name: el.hasAttribute('key') ? el.getAttribute('key') : el.innerHTML, 
+                    name: el.hasAttribute('key') ? el.getAttribute('key') : el.textContent,//el.innerHTML, 
                     role: el.getAttribute('role') || ''
                 };
             });
@@ -60,7 +60,8 @@ const find = {
             .map(el => {return {name: el, role: 'scribe'}});
     },
     allpersons: (xmlDoc) => {
-        const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc),...find.authors(xmlDoc)];
+        //const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc),...find.authors(xmlDoc)];
+        const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc)];
 
         const peepReducer = function(prevs, cur) {
             for(const prev of prevs) {

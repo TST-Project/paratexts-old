@@ -54,5 +54,7 @@ const readfiles = function(arr) {
     console.log('Colophons compiled: colophons.html.');
     output.persons(data,templatestr);
     console.log('Persons compiled: persons.html.');
+    output.personsnetwork(data,templatestr);
+    console.log('Persons newtork compiled: persons-network.html.');
 };
 

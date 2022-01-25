@@ -271,6 +271,80 @@ const output = {
         table.querySelectorAll('th')[2].classList.add('sorttable_alphanum');
         fs.writeFile('../persons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
+    personsnetwork: (data, templatestr) => {
+
+        const peepmap = function(cur,cur1) {
+            const txt = Sanscript.t(
+                cur.name.replace(/[\n\s]+/g,' ').trim(),
+                'tamil','iast');
+            return {
+                name: txt,
+                role: cur.role,
+                fname: cur1.fname,
+                cote: cur1.repo + ' ' + cur1.cote.text,
+            }
+        };
+
+        const peepredux = (acc, cur) => {
+            
+            if(!cur.role) return acc;
+
+            const cleanname = cur.name;
+
+            if(!acc.has(cleanname))
+                acc.set(cleanname, {roles: new Set([cur.role]), texts: new Set([cur.cote])});
+            else {
+                const oldrec = acc.get(cleanname);
+                oldrec.texts.add(cur.cote);
+                oldrec.roles.add(cur.role);
+            }
+
+            return acc;
+        };
+
+        const template = make.html(templatestr);
+        template.body.style.margin = '0 auto';
+        template.body.style.paddingLeft = '0';
+        const section = template.querySelector('section');
+        section.innerHTML = '';
+
+        const title = template.querySelector('title');
+        title.textContent = `${title.textContent}: Persons`;
+        
+        const persarr = data.reduce((acc, cur) => {
+            if(cur.persons.length > 0) {
+                return acc.concat( [...cur.persons].map((cur2) => peepmap(cur2,cur)) );
+            }
+            else return acc;
+        },[]);
+
+        const allpeeps = persarr.reduce(peepredux,new Map());
+        
+        const links = [];
+        const nodes = [];
+        const texts = new Set();
+
+        allpeeps.forEach((peep,key) => {
+            for(const text of peep.texts) {
+                links.push({source: key, target: text, value: 1});
+                texts.add(text);
+            }
+            nodes.push({id: key, group: [...peep.roles].join(', ')});
+            });
+
+        for(const text of texts) nodes.push({id: text, group: 'manuscript'});
+       
+        const json = JSON.stringify({nodes: nodes, links: links});
+        
+        const script = template.createElement('script');
+        script.setAttribute('type','module');
+        script.innerHTML =
+`import { makeChart } from './persons.mjs';
+const graph = ${json}
+document.querySelector('section').appendChild(makeChart(graph));`;
+        template.body.appendChild(script);
+        fs.writeFile('../persons-network.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+    },
 };
 
 export { output };
