@@ -330,7 +330,9 @@ const output = {
                 links.push({source: key, target: text, value: 1});
                 texts.add(text);
             }
-            nodes.push({id: key, group: [...peep.roles].join(', ')});
+            const sortedroles = [...peep.roles];
+            sortedroles.sort();
+            nodes.push({id: key, group: sortedroles.join(', ')});
             });
 
         for(const text of texts) nodes.push({id: text, group: 'manuscript'});
