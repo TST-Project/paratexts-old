@@ -57,7 +57,7 @@ const find = {
             ['#EdouardAriel','Édouard Ariel'],
             ['#PhEDucler','Philippe Étienne Ducler'],
             ['#DuclerScribe','Ducler\'s scribe'],
-            ['#UmraosinghSherGil','Umraosingh Sher-Gil']
+            ['#UmraosinghShergil','Umraosingh Sher-Gil']
         ]);
         return els.map(el => scribes.get(el.getAttribute('scribeRef')))
             .filter(el => el !== undefined)
