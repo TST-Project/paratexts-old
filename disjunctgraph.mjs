@@ -54,9 +54,9 @@ const ForceGraph = function({
   const forceLink = d3.forceLink(links).id(({index: i}) => N[i]);
   if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
   else forceNode.strength(function(d,i) {
-      const a = i === 0 ? -2000 : -1000;
+      const a = i === 0 ? -1200 : -1000;
       return a;
-  }).distanceMin(100).distanceMax(300);
+  }).distanceMin(50).distanceMax(200);
   if (linkStrength !== undefined) forceLink.strength(linkStrength);
 
   const simulation = d3.forceSimulation(nodes)
