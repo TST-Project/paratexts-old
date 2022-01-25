@@ -5,11 +5,16 @@ import { Sanscript } from './sanscript.mjs';
 import { util, make, check } from './utils.mjs';
 
 const xsltSheet = fs.readFileSync('./xslt/tei-to-html-reduced.json',{encoding:'utf-8'});
+const templatestr = fs.readFileSync('template.html',{encoding:'utf8'});
 
 const output = {
-    blessings: (data,templatestr) => {
-
-        const blessingsredux = function(acc,cur,cur1) {
+    paratexts: (data, opts) => {
+        
+        const ptitle = opts.name ? opts.name[0].toUpperCase() + opts.name.slice(1) : 'Paratexts';
+        const pprop = opts.prop;
+        const pfilename = opts.name.replace(/\s+/g, '_') + '.html';
+    
+        const predux = function(acc,cur,cur1) {
             
             const ret = util.innertext(cur);
             const inner = ret.inner;
@@ -53,23 +58,20 @@ const output = {
         const template = make.html(templatestr);
 
         const title = template.querySelector('title');
-        title.textContent = `${title.textContent}: Blessings`;
-        template.body.style.backgroundImage ='url("blessings-tile.png")';
-        template.body.style.backgroundAttachment = 'fixed';
-        template.body.backgroundRepeat = 'repeat';
+        title.textContent = `${title.textContent}: ${ptitle}`;
 
         const table = template.querySelector('#index').firstElementChild;
         const tstr = data.reduce((acc, cur) => {
-            if(cur.blessings.length > 0) {
-                const lines = [...cur.blessings].reduce((acc2,cur2) => blessingsredux(acc2,cur2,cur),'');
+            if(cur[pprop].length > 0) {
+                const lines = [...cur[pprop]].reduce((acc2,cur2) => predux(acc2,cur2,cur),'');
                 return acc + lines;
             }
             else return acc;
         },'');
-        const thead = make.header(['Blessing','Shelfmark','Repository','Title','Unit','Page/folio','Placement']);
+        const thead = make.header([ptitle,'Shelfmark','Repository','Title','Unit','Page/folio','Placement']);
         table.innerHTML = thead + tstr;
         table.querySelectorAll('th')[1].classList.add('sorttable_alphanum');
-        fs.writeFile('../blessings.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+        fs.writeFile(`../${pfilename}`,template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
    
     xslxblessings: (data) => {
@@ -121,7 +123,7 @@ const output = {
         xlsx.writeFile(wb,'../blessings.xlsx');
     },
 
-    colophons: (data,templatestr) => {
+    colophons: (data) => {
         const colophonredux = function(acc,cur,cur1) {
             
             const inner = cur.innerHTML;
@@ -169,7 +171,7 @@ const output = {
 
         fs.writeFile('../colophons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
-    tbcs: (data,templatestr) => {
+    tbcs: (data) => {
 
         const tbcsredux = function(acc,cur,cur1) {
             
@@ -230,7 +232,8 @@ const output = {
         table.querySelectorAll('th')[1].classList.add('sorttable_alphanum');
         fs.writeFile('../tbcs.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
-    persons: (data, templatestr) => {
+
+    persons: (data) => {
 
         const peepredux = function(acc,cur,cur1) {
             const txt = Sanscript.t(
@@ -271,7 +274,7 @@ const output = {
         table.querySelectorAll('th')[2].classList.add('sorttable_alphanum');
         fs.writeFile('../persons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
-    personsnetwork: (data, templatestr) => {
+    personsnetwork: (data) => {
 
         const peepmap = function(cur,cur1) {
             const txt = Sanscript.t(

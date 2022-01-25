@@ -28,6 +28,9 @@ const readfiles = function(arr) {
         const fname = `https://tst-project.github.io/${f}`;
         return {
             blessings: find.blessings(xmlDoc),
+            benedictions: find.benedictions(xmlDoc),
+            invocations: find.invocations(xmlDoc),
+            tocs: find.tocs(xmlDoc),
             colophons: find.colophons(xmlDoc),
             cote: find.cote(xmlDoc),
             fname: `https://tst-project.github.io/${f}`,
@@ -43,18 +46,23 @@ const readfiles = function(arr) {
         else return 1;
     });
     */
-    const templatestr = fs.readFileSync('template.html',{encoding:'utf8'});
-    output.blessings(data,templatestr);
+    output.paratexts(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings compiled: blessings.html.');
+    output.paratexts(data,{name: 'benedictions', prop: 'benedictions'});
+    console.log('Benedictions compiled: benedictions.html.');
+    output.paratexts(data,{name: 'invocations', prop: 'invocations'});
+    console.log('Invocations compiled: invocations.html.');
+    output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
+    console.log('TOCs compiled: tocs.html.');
     output.xslxblessings(data);
     console.log('Blessings Excel sheet compiled: blessings.xlsx.');
-    output.tbcs(data,templatestr);
+    output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
     console.log('TBC paratexts compiled: tbcs.html.');
-    output.colophons(data,templatestr);
+    output.colophons(data);
     console.log('Colophons compiled: colophons.html.');
-    output.persons(data,templatestr);
+    output.persons(data);
     console.log('Persons compiled: persons.html.');
-    output.personsnetwork(data,templatestr);
+    output.personsnetwork(data);
     console.log('Persons newtork compiled: persons-network.html.');
 };
 
