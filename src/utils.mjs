@@ -85,8 +85,18 @@ const util = {
     },
 
     personlookup: (str) => {
+
+        const getStandard = (el) => el.closest('person').querySelector('persName[type="standard"]').textContent;
+
+        const split = str.split(':',2);
+        if(split.length > 1) {
+            const result = xpath.select(`//*[local-name(.)="idno" and @type="${split[0]}" and text()="${split[1]}"]`,persDoc,true);
+            if(result) return getStandard(result);
+            else return false;
+        }
+
         const result = xpath.select(`//*[local-name(.)="persName" and text()="${str}"]`,persDoc,true);
-        if(result) return result.closest('person').querySelector('persName[type="standard"]').textContent;
+        if(result) return getStandard(result);
         else return false;
     },
 };
