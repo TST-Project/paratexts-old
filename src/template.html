@@ -50,6 +50,7 @@
     </article>
    </body>
    <script type="text/javascript">
-      document.querySelector('table').addEventListener('mouseover',docMouseover);
+      const table = document.querySelector('table');
+      if(table) table.addEventListener('mouseover',docMouseover);
    </script>
 </html>

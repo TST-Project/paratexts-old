@@ -95,7 +95,8 @@ const ForceGraph = function({
       .call(drag(simulation));
 
   if (G) node.attr("fill", ({index: i}) => color(G[i]));
-  if (T) node.append("title").text(({index: i}) => T[i]);
+  //if (T) node.append("title").text(({index: i}) => T[i]);
+  if (T) node.append("desc").text(({index: i}) => T[i]);
 
   // Handle invalidation.
   if (invalidation != null) invalidation.then(() => simulation.stop());
@@ -139,11 +140,13 @@ const ForceGraph = function({
       .on("drag", dragged)
       .on("end", dragended);
   }
-    console.log(color);
   const legend = d3SvgLegend.legendColor().scale(color).orient('horizontal').shape('circle').shapePadding(100);
   svg.append('g').attr('class','legendOrdinal').attr('transform','translate(-750,470)');
   svg.select('.legendOrdinal').call(legend);
-  console.log(legend);
+  /*
+  console.log(color.domain());
+  console.log(color.range());
+  */
   return Object.assign(svg.node(), {scales: {color}});
 };
 

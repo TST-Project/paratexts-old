@@ -40,7 +40,6 @@ const docMouseover = function(e) {
 };
 const toolTip = {
     make: function(e,targ) {
-        console.log('yes');
         const toolText = targ.dataset.anno;
         if(!toolText) return;
 
