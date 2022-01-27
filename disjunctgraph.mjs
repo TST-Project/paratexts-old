@@ -120,11 +120,13 @@ const ForceGraph = function({
       else return color(group);
     });
   //if (T) node.append("title").text(({index: i}) => T[i]);
+  if (T) node.append("desc").text(({index: i}) => T[i]);
+  /*
   if (T) node.append("desc").text(({index: i}) => {
       const group = G[i] || Gs[i].join(', ');
       return `${N[i]} (${group})`;
       });
-  
+  */
   const defs = svg.append("defs");
   for(const [name,gradient] of gradients) {
     const el = defs.append("linearGradient").attr("id",name);
