@@ -25,7 +25,7 @@ const ForceGraph = function({
   linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
   linkStrokeLinecap = "round", // link stroke linecap
   linkStrength,
-  colors = d3.schemeTableau10, // an array of color strings, for the node groups
+  colors = [...d3.schemeTableau10,...d3.schemeCategory10], // an array of color strings, for the node groups
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
