@@ -27,10 +27,11 @@ const readfiles = function(arr) {
         perscache = allpersons.cache;
         const fname = `https://tst-project.github.io/${f}`;
         return {
-            blessings: find.blessings(xmlDoc),
-            benedictions: find.benedictions(xmlDoc),
-            invocations: find.invocations(xmlDoc),
-            tocs: find.tocs(xmlDoc),
+            blessings: find.paratexts(xmlDoc,'blessing'),
+            benedictions: find.paratexts(xmlDoc,'benediction'),
+            invocations: find.paratexts(xmlDoc,'invocation'),
+            satellites: find.paratexts(xmlDoc,'satellite-stanza'),
+            tocs: find.paratexts(xmlDoc,'table-of-contents'),
             colophons: find.colophons(xmlDoc),
             cote: find.cote(xmlDoc),
             fname: `https://tst-project.github.io/${f}`,
@@ -50,7 +51,7 @@ const readfiles = function(arr) {
     console.log('Blessings compiled: blessings.html.');
     output.paratexts(data,{name: 'benedictions', prop: 'benedictions'});
     console.log('Benedictions compiled: benedictions.html.');
-    output.paratexts(data,{name: 'invocations', prop: 'invocations'});
+    output.paratexts(data,{name: 'invocations', prop: 'invocations'}); // add satellite-stanzas
     console.log('Invocations compiled: invocations.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');

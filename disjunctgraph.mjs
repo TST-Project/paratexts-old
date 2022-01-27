@@ -37,6 +37,7 @@ const ForceGraph = function({
   if (nodeTitle === undefined) nodeTitle = (_, i) => N[i];
   const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
   const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
+  const Gs = nodeGroup == null ? null : d3.map(nodes, (i) => i.groups).map(intern);
   const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
 
   // Replace the input nodes and links with mutable objects for the simulation.
@@ -45,10 +46,9 @@ const ForceGraph = function({
 
   // Compute default domains.
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
-
   // Construct the scales.
+  nodeGroups = [...new Set(nodeGroups)].filter(x => x); // ignore groupless nodes
   const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
-
   // Construct the forces.
   const forceNode = d3.forceManyBody();
   const forceLink = d3.forceLink(links).id(({index: i}) => N[i]);
@@ -93,10 +93,45 @@ const ForceGraph = function({
     .join("circle")
       .attr("r", nodeRadius)
       .call(drag(simulation));
+   
+  const gradients = new Map();
+  const makeGradient = (name,groups) => {
+    const colors = groups.map(g => color(g));
+    const step = Math.min(100/colors.length);
+    const stops = colors.map((c,i) => {
+        return [{color: c, stop: step * i},{color: c, stop: step * (i+1)}];
+    }).flat();
+    return {name: groups.join('_').replace(/\s/g,'_'),
+            colors: stops
+            };
+  };
 
-  if (G) node.attr("fill", ({index: i}) => color(G[i]));
+  if (G) node.attr("fill", ({index: i}) => {
+      const group = G[i];
+      if(!group) {
+          const groups = Gs[i];
+          if(!groups) return '#000';
+          
+          const name = groups.join('_').replace(/\s/g,'_');
+          if(!gradients.has(name))
+            gradients.set(name,makeGradient(name,groups));
+          return `url(#${name})`;
+      }
+      else return color(group);
+    });
   //if (T) node.append("title").text(({index: i}) => T[i]);
-  if (T) node.append("desc").text(({index: i}) => T[i]);
+  if (T) node.append("desc").text(({index: i}) => {
+      const group = G[i] || Gs[i].join(', ');
+      return `${N[i]} (${group})`;
+      });
+  
+  const defs = svg.append("defs");
+  for(const [name,gradient] of gradients) {
+    const el = defs.append("linearGradient").attr("id",name);
+    for(const color of gradient.colors) {
+        el.append("stop").attr("offset",`${color.stop}%`).attr("stop-color",color.color);
+    }
+  }
 
   // Handle invalidation.
   if (invalidation != null) invalidation.then(() => simulation.stop());

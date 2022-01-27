@@ -1,10 +1,7 @@
 import { util } from './utils.mjs';
 
 const find = {
-    blessings: (xmlDoc) => xmlDoc.querySelectorAll('seg[function="blessing"], desc[type~="blessing"]'),
-    benedictions: (xmlDoc) => xmlDoc.querySelectorAll('seg[function="benediction"], desc[type~="benediction"]'),
-    invocations: (xmlDoc) => xmlDoc.querySelectorAll('seg[function="invocation"], desc[type~="invocation"]'),
-    tocs: (xmlDoc) => xmlDoc.querySelectorAll('seg[function="table-of-contents"], desc[type~="table-of-contents"]'),
+    paratexts: (xmlDoc,name) => xmlDoc.querySelectorAll(`seg[function="${name}"], desc[type~="${name}"]`),
     colophons: (xmlDoc) => xmlDoc.querySelectorAll('colophon, seg[function="colophon"]'),
 
     cote: (xmlDoc) => {

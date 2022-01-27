@@ -330,9 +330,14 @@ const output = {
                 links.push({source: key, target: text, value: 1});
                 texts.add(text);
             }
-            const sortedroles = [...peep.roles];
-            sortedroles.sort();
-            nodes.push({id: key, group: sortedroles.join(', ')});
+            const roles = [...peep.roles];
+            const node = {id: key};
+            if(roles.length === 1) node.group = roles[0];
+            else {
+                roles.sort();
+                node.groups = roles;
+            }
+            nodes.push(node);
             });
 
         for(const text of texts) nodes.push({id: text, group: 'manuscript'});
