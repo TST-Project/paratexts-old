@@ -1,8 +1,8 @@
 import { util } from './utils.mjs';
 
 const find = {
-    paratexts: (xmlDoc,name) => xmlDoc.querySelectorAll(`seg[function="${name}"], desc[type~="${name}"]`),
-    colophons: (xmlDoc) => xmlDoc.querySelectorAll('colophon, seg[function="colophon"]'),
+    paratexts: (xmlDoc,name) => xmlDoc.querySelectorAll(`seg[function~="${name}"], desc[type~="${name}"]`),
+    colophons: (xmlDoc) => xmlDoc.querySelectorAll('colophon, seg[function~="colophon"]'),
 
     cote: (xmlDoc) => {
         const txt = xmlDoc.querySelector('idno[type="shelfmark"]').textContent || '';

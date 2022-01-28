@@ -51,7 +51,7 @@ const readfiles = function(arr) {
     console.log('Blessings compiled: blessings.html.');
     output.paratexts(data,{name: 'benedictions', prop: 'benedictions'});
     console.log('Benedictions compiled: benedictions.html.');
-    output.paratexts(data,{name: 'invocations', prop: 'invocations'}); // add satellite-stanzas
+    output.invocations(data);
     console.log('Invocations compiled: invocations.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');

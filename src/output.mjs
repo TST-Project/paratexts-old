@@ -171,16 +171,18 @@ const output = {
 
         fs.writeFile('../colophons.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
-    tbcs: (data) => {
-
-        const tbcsredux = function(acc,cur,cur1) {
+    invocations: (data) => {
+        
+        const predux = function(acc,cur,cur1) {
             
             const ret = util.innertext(cur);
             const inner = ret.inner;
             const placement = ret.placement;
             const milestone = ret.milestone;
             const synch = ret.synch;
-
+            const is_satellite = 
+                'satellite-stanza' === (cur.getAttribute('func') || cur.getAttribute('type')) ?
+                '✓' : '';
             const unit = synch ? synch.replace(/^#/,'') : '';
             const processed = SaxonJS.transform({
                 stylesheetText: xsltSheet,
@@ -211,28 +213,31 @@ const output = {
                 <td>
                 ${placement}
                 </td>
+                <td>
+                ${is_satellite}
+                </td>
                 </tr>\n`;
         };
         
         const template = make.html(templatestr);
 
         const title = template.querySelector('title');
-        title.textContent = `${title.textContent}: TBC`;
+        title.textContent = `${title.textContent}: Invocations`;
 
         const table = template.querySelector('#index').firstElementChild;
         const tstr = data.reduce((acc, cur) => {
-            if(cur.tbcs.length > 0) {
-                const lines = [...cur.tbcs].reduce((acc2,cur2) => tbcsredux(acc2,cur2,cur),'');
+            const props = [...cur.invocations,...cur.satellites];
+            if(props.length > 0) {
+                const lines = props.reduce((acc2,cur2) => predux(acc2,cur2,cur),'');
                 return acc + lines;
             }
             else return acc;
         },'');
-        const thead = make.header(['Paratext','Shelfmark','Repository','Title','Unit','Page/folio','Placement']);
+        const thead = make.header(['Invocations','Shelfmark','Repository','Title','Unit','Page/folio','Placement','Satellite stanza']);
         table.innerHTML = thead + tstr;
         table.querySelectorAll('th')[1].classList.add('sorttable_alphanum');
-        fs.writeFile('../tbcs.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
+        fs.writeFile('../invocations.html',template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
-
     persons: (data) => {
 
         const peepredux = function(acc,cur,cur1) {
