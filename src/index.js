@@ -18,13 +18,10 @@ fs.readdir(dir,function(err,files) {
 
 
 const readfiles = function(arr) {
-    var perscache = new Map();
+    const allpersons = find.allpersons();
     const data = arr.map((f) => 
     {
         const xmlDoc = make.xml( fs.readFileSync(f,{encoding:'utf-8'}) );
-        const allpersons = find.allpersons(xmlDoc,perscache);
-        const persons = allpersons.peeps;
-        perscache = allpersons.cache;
         const fname = `https://tst-project.github.io/${f}`;
         return {
             blessings: find.paratexts(xmlDoc,'blessing'),
@@ -35,7 +32,7 @@ const readfiles = function(arr) {
             colophons: find.colophons(xmlDoc),
             cote: find.cote(xmlDoc),
             fname: `https://tst-project.github.io/${f}`,
-            persons: persons,
+            persons: allpersons(xmlDoc),
             repo: find.repo(xmlDoc),
             tbcs: find.tbcs(xmlDoc),
             title: find.title(xmlDoc)

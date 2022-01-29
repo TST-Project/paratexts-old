@@ -60,28 +60,35 @@ const find = {
             .filter(el => el !== undefined)
             .map(el => {return {name: el, role: 'scribe'}});
     },
-    allpersons: (xmlDoc,cache) => {
-        //const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc),...find.authors(xmlDoc)];
-        const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc)];
+    allpersons: () => {
+        const cache = new Map();
 
-        const peepReducer = function(prevs, cur) {
-            if(cache.has(cur.name))
-                cur.name = cache.get(cur.name);
-            else {
-                const canonicalname = util.personlookup(cur.name);
-                if(canonicalname) {
-                    cache.set(cur.name,canonicalname);
-                    cur.name = canonicalname;
+        return (xmlDoc) => {
+            //const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc),...find.authors(xmlDoc)];
+            const peeps = [...find.scribes(xmlDoc),...find.persnames(xmlDoc)];
+
+            const peepReducer = function(prevs, cur) {
+                if(cache.has(cur.name))
+                    cur.name = cache.get(cur.name);
+                else {
+                    const canonicalname = util.personlookup(cur.name);
+                    if(canonicalname) {
+                        cache.set(cur.name,canonicalname);
+                        cur.name = canonicalname;
+                    }
+                    else cache.set(cur.name,cur.name);
                 }
-            }
-            for(const prev of prevs) {
-                if(cur.name === prev.name && cur.role === prev.role)
-                    return prevs;
-            }
-            return [...prevs,cur];
-        };
 
-        return {peeps: peeps.reduce(peepReducer,[]), cache: cache};
+                for(const prev of prevs) {
+                    if(cur.name === prev.name && cur.role === prev.role)
+                        return prevs;
+                }
+
+                return [...prevs,cur];
+            };
+
+            return peeps.reduce(peepReducer,[]);
+        };
     },
 };
 
