@@ -52,8 +52,10 @@ const readfiles = function(arr) {
     console.log('Invocations compiled: invocations.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');
-    output.xslxblessings(data);
+    output.xslx(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings Excel sheet compiled: blessings.xlsx.');
+    output.xslx(data,{name: 'benedictions', prop: 'benedictions'});
+    console.log('Blessings Excel sheet compiled: benedictions.xlsx.');
     output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
     console.log('TBC paratexts compiled: tbcs.html.');
     output.colophons(data);

@@ -74,7 +74,7 @@ const output = {
         fs.writeFile(`../${pfilename}`,template.documentElement.outerHTML,{encoding: 'utf8'},function(){return;});
     },
    
-    xslxblessings: (data) => {
+    xslx: (data,opts) => {
 
         const xslx_Sheet = fs.readFileSync('xslt/blessings-xlsx.json',{encoding:'utf-8'});
         const xslx_Sheet_clean = fs.readFileSync('xslt/blessings-xlsx-clean.json',{encoding:'utf-8'});
@@ -109,8 +109,8 @@ const output = {
         const htmltab = xslxdoc.createElement('table');
         const tabbod = xslxdoc.createElement('tbody');
         const xslxstr = data.reduce((acc, cur) => {
-            if(cur.blessings.length > 0) {
-                const lines = [...cur.blessings].reduce((acc2,cur2) => xlsxredux(acc2,cur2,cur),'');
+            if(cur[opts.prop].length > 0) {
+                const lines = [...cur[opts.prop]].reduce((acc2,cur2) => xlsxredux(acc2,cur2,cur),'');
                 return acc + lines;
             }
             else return acc;
@@ -119,8 +119,8 @@ const output = {
         htmltab.appendChild(tabbod);
         const wb = xlsx.utils.book_new();
         const ws = xlsx.utils.table_to_sheet(htmltab);
-        xlsx.utils.book_append_sheet(wb,ws,'blessings');
-        xlsx.writeFile(wb,'../blessings.xlsx');
+        xlsx.utils.book_append_sheet(wb,ws,opts.name);
+        xlsx.writeFile(wb,`../${opts.name}.xlsx`);
     },
 
     colophons: (data) => {
