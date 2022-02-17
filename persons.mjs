@@ -5,7 +5,14 @@ import {ForceGraph} from './disjunctgraph.mjs';
 const makeChart = (data) => ForceGraph(data, {
   nodeId: d => d.id,
   nodeGroup: d => d.group,
-  nodeTitle: d => d.group ? `${d.id} (${d.group})` : `${d.id} (${d.groups.join(', ')})`,
+  nodeGroups: [
+            'manuscript',
+            'author, editor, translator',
+            'scribe, proofreader, annotator',
+            'commissioner, owner, collector',
+            'other'
+            ],
+  nodeTitle: d => `${d.id} (${d.roles})`,
   linkStrokeWidth: l => Math.sqrt(l.value),
   width: window.innerWidth,
   height: window.innerHeight,

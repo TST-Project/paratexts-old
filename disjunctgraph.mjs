@@ -177,7 +177,7 @@ const ForceGraph = function({
       .on("drag", dragged)
       .on("end", dragended);
   }
-  const legend = d3SvgLegend.legendColor().scale(color).orient('horizontal').shape('circle').shapePadding(100);
+  const legend = d3SvgLegend.legendColor().scale(color).orient('horizontal').shape('circle').shapePadding(300);
   svg.append('g').attr('class','legendOrdinal').attr('transform','translate(-750,470)');
   svg.select('.legendOrdinal').call(legend);
   /*

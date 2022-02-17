@@ -293,14 +293,27 @@ const output = {
             }
         };
 
+        const bucketgroups = [
+            ['author','editor','translator'],
+            ['scribe','proofreader','annotator'],
+            ['commissioner','owner','collector']
+            ];
+        const buckets = new Map(bucketgroups.flatMap(el => {
+            const bucket = el.join(', ');
+            return el.map(role => [role, bucket]);
+        }));
+
         const peepredux = (acc, cur) => {
             
             if(!cur.role) return acc;
+            
+            const bucket = buckets.has(cur.role) ? buckets.get(cur.role) : 'other';
 
             if(!acc.has(cur.name))
-                acc.set(cur.name, {roles: new Set([cur.role]), texts: new Set([cur.cote])});
+                acc.set(cur.name, {buckets: new Set([bucket]), roles: new Set([cur.role]), texts: new Set([cur.cote])});
             else {
                 const oldrec = acc.get(cur.name);
+                oldrec.buckets.add(bucket);
                 oldrec.texts.add(cur.cote);
                 oldrec.roles.add(cur.role);
             }
@@ -336,16 +349,20 @@ const output = {
                 texts.add(text);
             }
             const roles = [...peep.roles];
+            const buckets = [...peep.buckets];
             const node = {id: key};
-            if(roles.length === 1) node.group = roles[0];
+            roles.sort();
+            node.roles = roles.join(', ');
+
+            if(buckets.length === 1) node.group = buckets[0];
             else {
-                roles.sort();
-                node.groups = roles;
+                buckets.sort();
+                node.groups = buckets;
             }
             nodes.push(node);
             });
 
-        for(const text of texts) nodes.push({id: text, group: 'manuscript'});
+        for(const text of texts) nodes.push({id: text, group: 'manuscript', roles: 'manuscript'});
        
         const json = JSON.stringify({nodes: nodes, links: links});
         
