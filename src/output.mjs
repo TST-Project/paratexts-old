@@ -350,7 +350,7 @@ const output = {
             }
             const roles = [...peep.roles];
             const buckets = [...peep.buckets];
-            const node = {id: key};
+            const node = {id: key, size: peep.texts.size};
             roles.sort();
             node.roles = roles.join(', ');
 

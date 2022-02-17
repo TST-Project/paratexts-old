@@ -17,6 +17,7 @@ const ForceGraph = function({
   nodeStrokeWidth = 1.5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius = 7, // node radius, in pixels
+  nodeSize = d => {return d.size ? 7 + d.size * 0.2 : 5},
   nodeStrength,
   linkSource = ({source}) => source, // given d in links, returns a node identifier string
   linkTarget = ({target}) => target, // given d in links, returns a node identifier string
@@ -38,6 +39,7 @@ const ForceGraph = function({
   const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
   const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
   const Gs = nodeGroup == null ? null : d3.map(nodes, (i) => i.groups).map(intern);
+  const R = d3.map(nodes, nodeSize).map(intern);
   const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
 
   // Replace the input nodes and links with mutable objects for the simulation.
@@ -91,7 +93,7 @@ const ForceGraph = function({
     .selectAll("circle")
     .data(nodes)
     .join("circle")
-      .attr("r", nodeRadius)
+      .attr("r", ({index: i}) => R[i])
       .call(drag(simulation));
    
   const gradients = new Map();
