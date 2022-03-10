@@ -23,7 +23,7 @@ const readfiles = function(arr) {
     const data = arr.map((f) => 
     {
         const xmlDoc = make.xml( fs.readFileSync(f,{encoding:'utf-8'}) );
-        const basename = path.parse(f);
+        const basename = path.parse(f).base;
         return {
             blessings: find.paratexts(xmlDoc,'blessing'),
             benedictions: find.paratexts(xmlDoc,'benediction'),
