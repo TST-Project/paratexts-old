@@ -18,8 +18,8 @@ jobs:
 
       - run: |
           git clone https://github.com/TST-Project/mss.git
-          git clone https://github.com/TST-Project/authority-files.git
           cd src
+          git clone https://github.com/TST-Project/authority-files.git
           git clone https://github.com/TST-Project/lib.git
           yarn install
           yarn build
