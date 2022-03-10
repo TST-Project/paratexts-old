@@ -80,4 +80,29 @@ const chartMouseover = (e) => {
         toolTip.make(e,targ);
 };
 
-export { makeChart, chartMouseover };
+const makeLegend = (color) => {
+    const categories = color.domain();
+    const colors = color.range();
+    const legend = categories.map((x, i) => {
+        const rect = document.createElement('div');
+        rect.classList.add('legend-square');
+        rect.style.background = colors[i];
+        const txt = document.createElement('div');
+        txt.appendChild(document.createTextNode(x));
+        txt.classList.add('legend-label');
+        const container = document.createElement('div');
+        container.classList.add('legend-item');
+        container.appendChild(rect);
+        container.appendChild(txt);
+        return container;
+    });
+    
+    const ret = legend.reduce((acc,cur) => {
+        acc.appendChild(cur);
+        return acc;
+    },document.createElement('div'));
+    ret.id = 'legend';
+    return ret;
+};
+
+export { makeChart, makeLegend, chartMouseover };

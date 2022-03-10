@@ -58,7 +58,7 @@ const ForceGraph = function({
   else forceNode.strength(function(d,i) {
       const a = i === 0 ? -1200 : -1000;
       return a;
-  }).distanceMin(50).distanceMax(200);
+  }).distanceMin(70).distanceMax(170);
   if (linkStrength !== undefined) forceLink.strength(linkStrength);
 
   const simulation = d3.forceSimulation(nodes)
@@ -179,12 +179,10 @@ const ForceGraph = function({
       .on("drag", dragged)
       .on("end", dragended);
   }
+  /*
   const legend = d3SvgLegend.legendColor().scale(color).orient('horizontal').shape('circle').shapePadding(300);
   svg.append('g').attr('class','legendOrdinal').attr('transform','translate(-750,470)');
   svg.select('.legendOrdinal').call(legend);
-  /*
-  console.log(color.domain());
-  console.log(color.range());
   */
   return Object.assign(svg.node(), {scales: {color}});
 };
