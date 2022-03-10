@@ -1,7 +1,7 @@
 import fs from 'fs';
-import { find } from './find.mjs';
-import { make } from './utils.mjs';
-import { output } from './output.mjs';
+import { find } from './lib/util/find.mjs';
+import { make } from './lib/util/utils.mjs';
+import { output } from './lib/util/output.mjs';
 
 const dir = '../mss/';
 
