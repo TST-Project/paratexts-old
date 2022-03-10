@@ -32,7 +32,7 @@ const readfiles = function(arr) {
             tocs: find.paratexts(xmlDoc,'table-of-contents'),
             colophons: find.colophons(xmlDoc),
             cote: find.cote(xmlDoc),
-            fname: `https://tst-project.github.io/mss/${basename}`,
+            fname: `../mss/${basename}`,
             persons: allpersons(xmlDoc),
             repo: find.repo(xmlDoc),
             tbcs: find.tbcs(xmlDoc),
