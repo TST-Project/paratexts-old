@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { find } from './lib/util/find.mjs';
 import { make } from './lib/util/utils.mjs';
 import { output } from './lib/util/output.mjs';
@@ -22,7 +23,7 @@ const readfiles = function(arr) {
     const data = arr.map((f) => 
     {
         const xmlDoc = make.xml( fs.readFileSync(f,{encoding:'utf-8'}) );
-        const fname = `https://tst-project.github.io/${f}`;
+        const basename = path.parse(f);
         return {
             blessings: find.paratexts(xmlDoc,'blessing'),
             benedictions: find.paratexts(xmlDoc,'benediction'),
@@ -31,7 +32,7 @@ const readfiles = function(arr) {
             tocs: find.paratexts(xmlDoc,'table-of-contents'),
             colophons: find.colophons(xmlDoc),
             cote: find.cote(xmlDoc),
-            fname: `https://tst-project.github.io/${f}`,
+            fname: `https://tst-project.github.io/${basename}`,
             persons: allpersons(xmlDoc),
             repo: find.repo(xmlDoc),
             tbcs: find.tbcs(xmlDoc),
