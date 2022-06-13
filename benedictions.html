@@ -11,7 +11,9 @@
       <link rel="stylesheet" href="../lib/css/transcription.css">
       <link rel="stylesheet" href="../lib/css/index.css">
       
-      <script type="text/javascript" src="../lib/js/sorttable.js"></script>
+      <!--script type="text/javascript" src="../lib/js/sorttable.js"></script-->
+      <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+      <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>   
       <script type="text/javascript" src="../lib/js/index.js"></script>
    </head>
    <body lang="en">
@@ -50,8 +52,7 @@
     </div>
     <article>
         <section>
-            <table id="index" class="sortable">
-                <tbody><tr id="head"><th>Benedictions</th><th class="sorttable_alphanum">Shelfmark</th><th>Repository</th><th>Title</th><th>Unit</th><th>Page/folio</th><th>Placement</th></tr><tr>
+            <table id="index"><thead><tr id="head"><th>Benedictions</th><th class="sorttable_alphanum">Shelfmark</th><th>Repository</th><th>Title</th><th>Unit</th><th>Page/folio</th><th>Placement</th></tr></thead><tbody><tr>
                 <td>
                 <span class="milestone" lang="en">column 3</span> <span class="lb" lang="en" data-anno="line 1-5" data-n="1-5">␤</span>Akattiyamakāmuṉikku cuppiṟamaṇiyacuvāmiyār aṉukkiṟakampaṇṇiṉatu
                 </td>
@@ -243,14 +244,9 @@
                 column 3
                 </td>
                 </tr>
-</tbody>
-            </table>
+</tbody></table>
         </section>
     </article>
    
-   <script type="text/javascript">
-      const table = document.querySelector('table');
-      if(table) table.addEventListener('mouseover',docMouseover);
-   </script>
 
 </body></html>

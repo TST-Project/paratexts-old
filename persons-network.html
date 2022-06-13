@@ -11,7 +11,9 @@
       <link rel="stylesheet" href="../lib/css/transcription.css">
       <link rel="stylesheet" href="../lib/css/index.css">
       
-      <script type="text/javascript" src="../lib/js/sorttable.js"></script>
+      <!--script type="text/javascript" src="../lib/js/sorttable.js"></script-->
+      <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+      <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>   
       <script type="text/javascript" src="../lib/js/index.js"></script>
    </head>
    <body lang="en" style="margin: 0px auto; padding-left: 0px;">
@@ -52,10 +54,6 @@
         <section></section>
     </article>
    
-   <script type="text/javascript">
-      const table = document.querySelector('table');
-      if(table) table.addEventListener('mouseover',docMouseover);
-   </script>
 
 <script type="module">
 import { makeChart, makeLegend, chartMouseover } from './persons.mjs';
