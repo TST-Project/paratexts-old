@@ -5,7 +5,7 @@ import { Sanscript } from './sanscript.mjs';
 import { util, make, check } from './utils.mjs';
 
 const xsltSheet = fs.readFileSync('./xslt/tei-to-html-reduced.json',{encoding:'utf-8'});
-const templatestr = fs.readFileSync('template.html',{encoding:'utf8'});
+const templatestr = fs.readFileSync('./lib/util/template.html',{encoding:'utf8'});
 
 const output = {
     paratexts: (data, opts) => {
