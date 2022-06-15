@@ -23,8 +23,8 @@ jobs:
           node-version: '16'
 
       - run: |
-          git clone https://github.com/TST-Project/mss.git
           cd src
+          git clone https://github.com/TST-Project/mss.git
           git clone https://github.com/TST-Project/authority-files.git
           git clone https://github.com/TST-Project/lib.git
           yarn install
@@ -35,4 +35,4 @@ jobs:
         with: 
           commit_message: automatic paratexts update
           file_pattern: ./*.html ./*.xlsx
-          commit_user_name: TST Bot
+          commit_user_name: TST[bot]
