@@ -6,7 +6,7 @@ import { util, make, check } from './utils.mjs';
 
 const xsltSheet = fs.readFileSync('./xslt/tei-to-html-reduced.json',{encoding:'utf-8'});
 const templatestr = fs.readFileSync('./lib/util/template.html',{encoding:'utf8'});
-const descriptions = make.html(fs.readFileSync('descriptions.html',{encoding:'utf8'}));
+const descriptions = make.html(fs.readFileSync('./descriptions.html',{encoding:'utf8'}));
 
 const output = {
     paratexts: (data, opts) => {
