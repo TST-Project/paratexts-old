@@ -6,11 +6,14 @@ import { util, make, check } from './utils.mjs';
 
 const xsltSheet = fs.readFileSync('./xslt/tei-to-html-reduced.json',{encoding:'utf-8'});
 const templatestr = fs.readFileSync('./lib/util/template.html',{encoding:'utf8'});
+const descriptions = make.html(fs.readFileSync('descriptions.html',{encoding:'utf8'}));
 
 const output = {
     paratexts: (data, opts) => {
         
         const ptitle = opts.name ? opts.name[0].toUpperCase() + opts.name.slice(1) : 'Paratexts';
+        const pdesc = opts.name ? descriptions.getElementById(opts.name) : null;
+
         const pprop = opts.prop;
         const pfilename = opts.name.replace(/\s+/g, '_') + '.html';
     
@@ -56,6 +59,8 @@ const output = {
         };
         
         const template = make.html(templatestr);
+        
+        if(pdesc) template.querySelector('article').prepend(pdesc);
 
         const title = template.querySelector('title');
         title.textContent = `${title.textContent}: ${ptitle}`;
@@ -153,6 +158,9 @@ const output = {
 
         const template = make.html(templatestr);
 
+        const pdesc = opts.name ? descriptions.getElementById('colophons') : null;
+        if(pdesc) template.querySelector('article').prepend(pdesc);
+
         const title = template.querySelector('title');
         title.textContent = `${title.textContent}: Colophons`;
         
@@ -220,6 +228,9 @@ const output = {
         };
         
         const template = make.html(templatestr);
+
+        const pdesc = opts.name ? descriptions.getElementById('invocations') : null;
+        if(pdesc) template.querySelector('article').prepend(pdesc);
 
         const title = template.querySelector('title');
         title.textContent = `${title.textContent}: Invocations`;
