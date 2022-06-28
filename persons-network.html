@@ -49,6 +49,7 @@
         <div><a href="/xylotheque">Xylothèque</a></div>
     </div>
     <article>
+        <div id="spinner"></div>
         <section></section>
     </article>
    
@@ -63,6 +64,9 @@ const legend = makeLegend(svg.scales.color);
 
 section.appendChild(legend);
 section.appendChild(svg);
+
+document.getElementById('spinner').remove();
+document.querySelector('section').style.visibility = 'visible';
 
 section.addEventListener('mouseover',chartMouseover);
 </script></body></html>
