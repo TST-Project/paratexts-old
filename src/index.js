@@ -26,7 +26,7 @@ const readfiles = function(arr) {
         const basename = path.parse(f).base;
         return {
             blessings: find.paratexts(xmlDoc,'blessing'),
-            benedictions: find.paratexts(xmlDoc,'benediction'),
+            //benedictions: find.paratexts(xmlDoc,'benediction'),
             invocations: find.paratexts(xmlDoc,'invocation'),
             satellites: find.paratexts(xmlDoc,'satellite-stanza'),
             tocs: find.paratexts(xmlDoc,'table-of-contents'),
@@ -47,16 +47,16 @@ const readfiles = function(arr) {
     */
     output.paratexts(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings compiled: blessings.html.');
-    output.paratexts(data,{name: 'benedictions', prop: 'benedictions'});
-    console.log('Benedictions compiled: benedictions.html.');
+    //output.paratexts(data,{name: 'benedictions', prop: 'benedictions'});
+    //console.log('Benedictions compiled: benedictions.html.');
     output.invocations(data);
     console.log('Invocations compiled: invocations.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');
     output.xslx(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings Excel sheet compiled: blessings.xlsx.');
-    output.xslx(data,{name: 'benedictions', prop: 'benedictions'});
-    console.log('Blessings Excel sheet compiled: benedictions.xlsx.');
+    //output.xslx(data,{name: 'benedictions', prop: 'benedictions'});
+    //console.log('Benedictions Excel sheet compiled: benedictions.xlsx.');
     output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
     console.log('TBC paratexts compiled: tbcs.html.');
     output.colophons(data);
