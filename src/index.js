@@ -19,24 +19,35 @@ fs.readdir(dir,function(err,files) {
 
 
 const readfiles = function(arr) {
+    const step = (process.argv.length > 2 && process.argv[2] === '2') ?
+        2 : 1;
     const allpersons = find.allpersons();
     const data = arr.map((f) => 
     {
         const xmlDoc = make.xml( fs.readFileSync(f,{encoding:'utf-8'}) );
         const basename = path.parse(f).base;
-        return {
+        return (step === 1) ?
+        {
+            cote: find.cote(xmlDoc),
+            fname: `../mss/${basename}`,
+            title: find.title(xmlDoc),
+            repo: find.repo(xmlDoc),
+
             blessings: find.paratexts(xmlDoc,'blessing'),
             //benedictions: find.paratexts(xmlDoc,'benediction'),
             invocations: find.paratexts(xmlDoc,'invocation'),
             satellites: find.paratexts(xmlDoc,'satellite-stanza'),
             tocs: find.paratexts(xmlDoc,'table-of-contents'),
             colophons: find.colophons(xmlDoc),
+            tbcs: find.tbcs(xmlDoc),
+        //    persons: allpersons(xmlDoc),
+        } :
+        {
             cote: find.cote(xmlDoc),
             fname: `../mss/${basename}`,
-            persons: allpersons(xmlDoc),
-            repo: find.repo(xmlDoc),
-            tbcs: find.tbcs(xmlDoc),
             title: find.title(xmlDoc)
+            repo: find.repo(xmlDoc),
+            persons: allpersons(xmlDoc)
         };
     });
     /*
@@ -45,25 +56,26 @@ const readfiles = function(arr) {
         else return 1;
     });
     */
-    output.paratexts(data,{name: 'blessings', prop: 'blessings'});
-    console.log('Blessings compiled: blessings.html.');
-    //output.paratexts(data,{name: 'benedictions', prop: 'benedictions'});
-    //console.log('Benedictions compiled: benedictions.html.');
-    output.invocations(data);
-    console.log('Invocations compiled: invocations.html.');
-    output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
-    console.log('TOCs compiled: tocs.html.');
-    output.xslx(data,{name: 'blessings', prop: 'blessings'});
-    console.log('Blessings Excel sheet compiled: blessings.xlsx.');
-    //output.xslx(data,{name: 'benedictions', prop: 'benedictions'});
-    //console.log('Benedictions Excel sheet compiled: benedictions.xlsx.');
-    output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
-    console.log('TBC paratexts compiled: tbcs.html.');
-    output.colophons(data);
-    console.log('Colophons compiled: colophons.html.');
-    output.persons(data);
-    console.log('Persons compiled: persons.html.');
-    output.personsnetwork(data);
-    console.log('Persons newtork compiled: persons-network.html.');
-};
 
+    const step1 = () => {
+        output.paratexts(data,{name: 'blessings', prop: 'blessings'});
+        console.log('Blessings compiled: blessings.html.');
+        output.invocations(data);
+        console.log('Invocations compiled: invocations.html.');
+        output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
+        console.log('TOCs compiled: tocs.html.');
+        output.xslx(data,{name: 'blessings', prop: 'blessings'});
+        console.log('Blessings Excel sheet compiled: blessings.xlsx.');
+        output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
+        console.log('TBC paratexts compiled: tbcs.html.');
+        output.colophons(data);
+        console.log('Colophons compiled: colophons.html.');
+    };
+    const step2 = () => {
+        output.persons(data);
+        console.log('Persons compiled: persons.html.');
+        output.personsnetwork(data);
+        console.log('Persons newtork compiled: persons-network.html.');
+    };
+    (step === 1) ? step1() : step2();
+};
