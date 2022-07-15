@@ -45,7 +45,7 @@ const readfiles = function(arr) {
         {
             cote: find.cote(xmlDoc),
             fname: `../mss/${basename}`,
-            title: find.title(xmlDoc)
+            title: find.title(xmlDoc),
             repo: find.repo(xmlDoc),
             persons: allpersons(xmlDoc)
         };
