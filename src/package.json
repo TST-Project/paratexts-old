@@ -7,7 +7,8 @@
     "xpath": "^0.0.32"
   },
   "scripts": {
-    "build": "node index.js"
+    "build1": "node --max-old-space-size=4096 index.js",
+    "build2": "node --max-old-space-size-4096 index.js 2"
   },
   "type": "module",
   "name": "tst-paratexts",
