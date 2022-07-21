@@ -26,28 +26,19 @@ const readfiles = function(arr) {
     {
         const xmlDoc = make.xml( fs.readFileSync(f,{encoding:'utf-8'}) );
         const basename = path.parse(f).base;
-        return //(step === 1) ?
-        {
+        return {
             cote: find.cote(xmlDoc),
             fname: `../mss/${basename}`,
             title: find.title(xmlDoc),
             repo: find.repo(xmlDoc),
 
             blessings: find.paratexts(xmlDoc,'blessing'),
-            //benedictions: find.paratexts(xmlDoc,'benediction'),
             invocations: find.paratexts(xmlDoc,'invocation'),
             satellites: find.paratexts(xmlDoc,'satellite-stanza'),
             tocs: find.paratexts(xmlDoc,'table-of-contents'),
             colophons: find.colophons(xmlDoc),
             tbcs: find.tbcs(xmlDoc),
-            persons: allpersons(xmlDoc),
-        //} :
-        //{
-        //    cote: find.cote(xmlDoc),
-        //    fname: `../mss/${basename}`,
-        //    title: find.title(xmlDoc),
-        //    repo: find.repo(xmlDoc),
-        //    persons: allpersons(xmlDoc)
+            persons: allpersons(xmlDoc)
         };
     });
     /*
