@@ -28,8 +28,8 @@ jobs:
           git clone https://github.com/TST-Project/authority-files.git
           git clone https://github.com/TST-Project/lib.git
           yarn install
-          yarn build
-          yarn build 2
+          yarn build1
+          yarn build2
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with: 
