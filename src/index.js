@@ -69,10 +69,8 @@ const readfiles = function(arr) {
     console.log('Headers compiled: headers.html.');
     output.paratexts(data, {name: 'ownership statements', prop: 'ownerships'});
     console.log('Ownership statements compiled: ownership-statements.html.');
-    /*
-    output.paratexts(data, {name: 'titles', prop: 'titles'});
+    output.titles(data);
     console.log('Titles compiled: titles.html.');
-    */
     output.persons(data);
     console.log('Persons compiled: persons.html.');
     output.personsnetwork(data);
