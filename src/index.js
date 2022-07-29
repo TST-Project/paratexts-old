@@ -57,7 +57,7 @@ const readfiles = function(arr) {
     output.xslx(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings Excel sheet compiled: blessings.xlsx.');
     console.log('Invocations compiled: invocations.html.');
-    output.satellite(tata);
+    output.satellite(data);
     console.log('Satellite stanzas compiled: satellite-stanzas.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');
