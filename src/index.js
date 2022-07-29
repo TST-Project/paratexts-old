@@ -50,7 +50,6 @@ const readfiles = function(arr) {
         else return 1;
     });
     */
-    
     output.paratexts(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings compiled: blessings.html.');
     output.invocations(data);
