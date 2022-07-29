@@ -35,6 +35,9 @@ const readfiles = function(arr) {
             blessings: find.paratexts(xmlDoc,'blessing'),
             invocations: find.paratexts(xmlDoc,'invocation'),
             satellites: find.paratexts(xmlDoc,'satellite-stanza'),
+            headers: find.paratexts(xmlDoc,'header'),
+            ownerships: find.paratexts(xmlDoc, 'ownership-statement'),
+            titles: find.paratexts(xmlDoc,'title'),
             tocs: find.paratexts(xmlDoc,'table-of-contents'),
             colophons: find.colophons(xmlDoc),
             tbcs: find.tbcs(xmlDoc),
@@ -51,15 +54,23 @@ const readfiles = function(arr) {
     output.paratexts(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings compiled: blessings.html.');
     output.invocations(data);
-    console.log('Invocations compiled: invocations.html.');
-    output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
-    console.log('TOCs compiled: tocs.html.');
     output.xslx(data,{name: 'blessings', prop: 'blessings'});
     console.log('Blessings Excel sheet compiled: blessings.xlsx.');
+    console.log('Invocations compiled: invocations.html.');
+    output.satellite(tata);
+    console.log('Satellite stanzas compiled: satellite-stanzas.html.');
+    output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
+    console.log('TOCs compiled: tocs.html.');
     output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
     console.log('TBC paratexts compiled: tbcs.html.');
     output.colophons(data);
     console.log('Colophons compiled: colophons.html.');
+    output.paratexts(data, {name: 'headers', prop: 'headers'});
+    console.log('Headers compiled: headers.html.');
+    output.paratexts(data, {name: 'ownership statements', prop: 'ownerships'});
+    console.log('Ownership statements compiled: ownership-statements.html.');
+    output.paratexts(data, {name: 'title', prop: 'titles'});
+    console.log('Titles compiled: title.html.');
     output.persons(data);
     console.log('Persons compiled: persons.html.');
     output.personsnetwork(data);
