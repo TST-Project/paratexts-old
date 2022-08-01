@@ -57,7 +57,7 @@ const readfiles = function(arr) {
     console.log('Blessings Excel sheet compiled: blessings.xlsx.');
     console.log('Invocations compiled: invocations.html.');
     output.satellite(data);
-    console.log('Satellite stanzas compiled: satellite-stanzas.html.');
+    console.log('Satellite stanzas compiled: satellite_stanzas.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');
     output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
@@ -67,7 +67,7 @@ const readfiles = function(arr) {
     output.paratexts(data, {name: 'headers', prop: 'headers'});
     console.log('Headers compiled: headers.html.');
     output.paratexts(data, {name: 'ownership statements', prop: 'ownerships'});
-    console.log('Ownership statements compiled: ownership-statements.html.');
+    console.log('Ownership statements compiled: ownership_statements.html.');
     output.titles(data);
     console.log('Titles compiled: titles.html.');
     output.persons(data);
