@@ -57,7 +57,7 @@ const readfiles = function(arr) {
     output.paratexts(data,{name: 'invocations', prop: 'invocations'});
     console.log('Invocations compiled: invocations.html.');
     output.paratexts(data,{name: 'satellite stanzas', prop: 'satellites'});
-    console.log('Satellite stanzas compiled: satellite-stanzas.html.');
+    console.log('Satellite stanzas compiled: satellite_stanzas.html.');
     output.paratexts(data,{name: 'tables of contents', prop: 'tocs'});
     console.log('TOCs compiled: tocs.html.');
     output.paratexts(data, {name: 'TBC', prop: 'tbcs'});
